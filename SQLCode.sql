@@ -107,5 +107,54 @@ from [WalmartSalesData.csv]
 group by [Customer type]
 order by tot_rating desc
 
-select [Customer type],[Product line]
+-----revenue from each customer type 
+SELECT [Customer type],
+       ROUND(SUM(Total), 2) AS total_sales,
+       ROUND(SUM(Total) / SUM(SUM(Total)) OVER (), 2) AS percentage_of_total
+FROM [WalmartSalesData.csv]
+GROUP BY [Customer type]
+ORDER BY total_sales DESC;
+--------- 49% of our sales from normal peopel  , so we should detect the prefrence of them 
+--
+------which product they prefer 
+select [Product line],COUNT(*) as no_of_normal
 from [WalmartSalesData.csv]
+where [Customer type] ='normal'
+group by [Product line]
+order by 2 desc
+
+-- we see a huge defrence from member and normal customer in there prefrences  
+select [Product line],COUNT(*) as no_of_member
+from [WalmartSalesData.csv]
+where [Customer type] ='member'
+group by [Product line]
+order by 2 desc
+
+--- which payment methos they prefere to pay with 
+--frist normal
+select [Payment],COUNT(*) as no_of_payment
+from [WalmartSalesData.csv]
+where [Customer type] ='normal'
+group by [Payment]
+order by 2 desc
+--then member
+select Payment,COUNT(*) as no_of_member
+from [WalmartSalesData.csv]
+where [Customer type] ='member'
+group by Payment
+order by 2 desc
+--- normal member prefer ewallet and member prefer credit card
+
+--what is the gender of normal 
+select Gender,COUNT(*) as no_of_member
+from [WalmartSalesData.csv]
+where [Customer type] ='normal'
+group by Gender
+order by 2 desc
+
+---what is most branch have no of normal peopel
+select Branch,COUNT(*) as no_of_member
+from [WalmartSalesData.csv]
+where [Customer type] ='normal'
+group by Branch
+order by 2 desc
